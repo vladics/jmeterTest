@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.example</groupId>
+    <artifactId>jmeter-test</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <profiles>
+        <profile>
+            <id>HTTP.Request</id>
+            <properties>
+                <performancetest.script>HTTP.Request</performancetest.script>
+                <Threads>0</Threads>
+                <RampUp>0</RampUp>
+                <LoopCount>0</LoopCount>
+            </properties>
+        </profile>
+    </profiles>
+
+    <!-- Properties -->
+    <properties>
+
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <jmeter.maven.plugin.version>2.9.0</jmeter.maven.plugin.version>
+        <jmeter.version>5.1.1</jmeter.version>
+
+        <!-- Test name -->
+        <performancetest.script>HTTP.Request</performancetest.script>
+
+        <test.Threads>10</test.Threads>
+        <test.RampUp>1</test.RampUp>
+        <test.LoopCount>1</test.LoopCount>
+        <test.RequestPath>/</test.RequestPath>
+        <test.RequestHost>blazedemo.com</test.RequestHost>
+        <test.RequestPort>80</test.RequestPort>
+
+
+        <maven.build.timestamp.format>yyyy-MM-dd_HH-mm-ss</maven.build.timestamp.format>
+
+    </properties>
+
+    <!-- Build Settings -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.lazerycode.jmeter</groupId>
+                <artifactId>jmeter-maven-plugin</artifactId>
+                <version>${jmeter.maven.plugin.version}</version>
+                <executions>
+                    <!-- Generate JMeter configuration -->
+                    <execution>
+                        <id>configuration</id>
+                        <goals>
+                            <goal>configure</goal>
+                        </goals>
+                    </execution>
+                    <!-- Run JMeter tests -->
+                    <execution>
+                        <id>jmeter-tests</id>
+                        <goals>
+                            <goal>jmeter</goal>
+                        </goals>
+                    </execution>
+                    <!-- Fail build on errors in test -->
+                    <execution>
+                        <id>jmeter-check-results</id>
+                        <goals>
+                            <goal>results</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <testFilesIncluded>
+                        <jMeterTestFile>test1.jmx</jMeterTestFile>
+                    </testFilesIncluded>
+                    <jmeterVersion>${jmeter.version}</jmeterVersion>
+
+                    <jmeterExtensions>
+                        <!-- Custom Thread Groups
+                        https://jmeter-plugins.org/?search=jpgc-casutg
+			            http://repo.maven.apache.org/maven2/kg/apc/jmeter-plugins-casutg/ -->
+                        <artifact>kg.apc:jmeter-plugins-casutg:2.6</artifact>
+
+                        <!-- Parallel Controller & Sampler
+                        https://jmeter-plugins.org/?search=parallel
+                        https://github.com/Blazemeter/jmeter-bzm-plugins/blob/master/parallel/Parallel.md
+                        https://www.blazemeter.com/blog/how-to-use-the-parallel-controller-in-jmeter -->
+                        <artifact>com.blazemeter:jmeter-parallel:0.9</artifact>
+                    </jmeterExtensions>
+
+                    <testPlanLibraries>
+                        <!-- JMeter Plugins Common Classes: Various utility classes to ease development of plugins
+			            http://repo.maven.apache.org/maven2/kg/apc/jmeter-plugins-cmn-jmeter/ -->
+                        <artifact>kg.apc:jmeter-plugins-cmn-jmeter:0.6</artifact>
+
+                        <!-- InfluxDB java client + dependencies -->
+                        <artifact>org.influxdb:influxdb-java:2.15</artifact>
+                    </testPlanLibraries>
+
+                    <downloadExtensionDependencies>false</downloadExtensionDependencies>
+                    <downloadLibraryDependencies>false</downloadLibraryDependencies>
+                    <downloadOptionalDependencies>false</downloadOptionalDependencies>
+                    <downloadJMeterDependencies>false</downloadJMeterDependencies>
+
+                    <!-- Configuring the jvm that the jmeter process runs in
+https://github.com/jmeter-maven-plugin/jmeter-maven-plugin/wiki/Configuring-the-jvm-that-the-jmeter-process-runs-in
+http://reins.altervista.org/java/A_Collection_of_JVM_Options_MP.html
+https://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html
+-->
+                    <jMeterProcessJVMSettings>
+                        <xms>256</xms>
+                        <xmx>1024</xmx>
+                        <arguments>
+                            <argument>-XX:MaxMetaspaceSize=256m</argument>
+
+                            <argument>-XX:+UseG1GC</argument>
+                            <argument>-XX:MaxGCPauseMillis=100</argument>
+                            <argument>-XX:G1ReservePercent=20</argument>
+
+                            <argument>-Duser.language=en</argument>
+                            <argument>-Duser.region=EN</argument>
+
+                            <argument>-Dfile.encoding=UTF-8</argument>
+
+                            <argument>-XX:-HeapDumpOnOutOfMemoryError</argument>
+                            <argument>-server</argument>
+                        </arguments>
+                    </jMeterProcessJVMSettings>
+
+                    <testResultsTimestamp>true</testResultsTimestamp>
+                    <appendResultsTimestamp>true</appendResultsTimestamp>
+                    <resultsFileNameDateFormat>yyyy-MM-dd_HH-mm-ss</resultsFileNameDateFormat>
+
+                    <propertiesJMeter>
+                        <jmeter.save.saveservice.thread_counts>true</jmeter.save.saveservice.thread_counts>
+                        <jmeter.save.saveservice.subresults>true</jmeter.save.saveservice.subresults>
+                        <sample_variables></sample_variables>
+                        <!-- # Disable sent statistics to https://jmeter-plugins.org/stats/ -->
+                        <jpgc.repo.sendstats>false</jpgc.repo.sendstats>
+
+                        <sampleresult.default.encoding>UTF-8</sampleresult.default.encoding>
+                    </propertiesJMeter>
+
+                    <propertiesReportGenerator>
+                        <jmeter.reportgenerator.overall_granularity>5000</jmeter.reportgenerator.overall_granularity>
+                        <jmeter.reportgenerator.graph.responseTimeDistribution.property.set_granularity>5000
+                        </jmeter.reportgenerator.graph.responseTimeDistribution.property.set_granularity>
+                    </propertiesReportGenerator>
+
+                    <propertiesUser>
+                        <testDataFolder>${project.basedir}/src/test/jmeter/data</testDataFolder>
+                        <test.script.folder>${project.basedir}/src/test/jmeter/script</test.script.folder>
+                        <reportFolder>${project.build.directory}/jmeter/results/${performancetest.script}</reportFolder>
+
+                        <Threads>${test.Threads}</Threads>
+                        <RampUp>${test.RampUp}</RampUp>
+                        <LoopCount>${test.LoopCount}</LoopCount>
+                        <RequestPath>${test.RequestPath}</RequestPath>
+                        <RequestHost>${test.RequestHost}</RequestHost>
+                        <RequestPort>${test.RequestPort}</RequestPort>
+
+                    </propertiesUser>
+
+                    <resultsFileFormat>csv</resultsFileFormat>
+                    <generateReports>true</generateReports>
+                    <reportDirectory>
+                        ${project.build.directory}/jmeter/reports/${performancetest.script}-${maven.build.timestamp}
+                    </reportDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

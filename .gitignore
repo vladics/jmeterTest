@@ -1,0 +1,6 @@
+# IntellijIdea files
+*.iml
+.idea
+target
+build
+debug.log
