@@ -1,0 +1,1234 @@
+<html xmlns:jmeter="http://jmeter.apache.org/">
+   <title>Schematic view of Test Plan</title>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <style>
+ul.tree, ul.tree ul {
+    list-style-type: none;
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAKAQMAAABPHKYJAAAAA1BMVEWIiIhYZW6zAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH1ggGExMZBky19AAAAAtJREFUCNdjYMAEAAAUAAHlhrBKAAAAAElFTkSuQmCC') repeat-y;
+    margin: 0;
+    padding: 0;
+}
+ul.tree ul {
+    margin-left: 10px;
+}
+ul.tree li {
+    margin: 0;
+    padding: 0 12px;
+    line-height: 20px;
+    background:  url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAUAQMAAACK1e4oAAAABlBMVEUAAwCIiIgd2JB2AAAAAXRSTlMAQObYZgAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9YIBhQIJYVaFGwAAAARSURBVAjXY2hgQIf/GTDFGgDSkwqATqpCHAAAAABJRU5ErkJggg==') no-repeat;
+    color: #369;
+}
+ul.tree li:last-child { 
+    background: #fff url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAUAQMAAACK1e4oAAAABlBMVEUAAwCIiIgd2JB2AAAAAXRSTlMAQObYZgAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9YIBhQIIhs+gc8AAAAQSURBVAjXY2hgQIf/GbAAAKCTBYBUjWvCAAAAAElFTkSuQmCC') no-repeat; 
+}
+</style>
+   </head>
+   <body>
+      <ul class="tree" id="tree">
+         <li><b>load test </b>
+            "Test Plan" 
+            (globalVars:[], 
+            executeTearDownThreadsOnShutdown: true)
+            <br>
+            &nbsp;&nbsp;&nbsp;Comments: <i style="color:green"></i></li>
+         <li>
+            <ul>
+               <li><b>globalVars</b>
+                  "User Defined Variables" 
+                  ([
+                  "RequestHost"
+                  =
+                  "ec2-52-15-106-242.us-east-2.compute.amazonaws.com"
+                  ,
+                  "login_admin"
+                  =
+                  "admin"
+                  ,
+                  "login_author"
+                  =
+                  "author"
+                  ,
+                  "login_develop"
+                  =
+                  "develop"
+                  ,
+                  "login_editor"
+                  =
+                  "editor"
+                  ,
+                  "login_manager"
+                  =
+                  "manager"
+                  ,
+                  "login_watcher"
+                  =
+                  "watcher"
+                  ,
+                  "password_admin"
+                  =
+                  "password"
+                  ,
+                  "password_author"
+                  =
+                  "password"
+                  ,
+                  "password_develop"
+                  =
+                  "password"
+                  ,
+                  "password_editor"
+                  =
+                  "password"
+                  ,
+                  "password_manager"
+                  =
+                  "password"
+                  ,
+                  "password_watcher"
+                  =
+                  "password"
+                  ,
+                  "ThreadCount"
+                  =
+                  "100"
+                  ])
+                  </li>
+               <li><b>kg.apc.jmeter.threads.UltimateThreadGroup</b>
+                  "Авторизация - Ultimate Thread Group" </li>
+               <li>
+                  <ul>
+                     <li><b>handle cookies</b>
+                        "HTTP Cookie Manager" 
+                        (clearOnEachIteration: true,
+                        policy: "",
+                        cookies: [
+                        ])
+                        </li>
+                     <li><b>flow control</b>
+                        "Test Action: Шаг нагрузки, 10 минут" <b>
+                           pause for 0ms
+                           
+                           current thread
+                           </b></li>
+                     <li>
+                        <ul>
+                           <li><b>PreciseThroughputTimer</b>
+                              "Precise Throughput Timer: Интенсивность работы пользователя" </li>
+                        </ul>
+                     </li>
+                     <li><b>http request</b>
+                        "Главная" 
+                        (method: "GET",
+                        url: "
+                        http://${RequestHost}://",
+                        
+                        body: [
+                        
+                        ]
+                        ,
+                        upload-files: [
+                        
+                        ]
+                        )
+                        <br>
+                        &nbsp;&nbsp;&nbsp;Comments: <i style="color:green">Detected the start of a redirect chain</i></li>
+                     <li><b>http request</b>
+                        "Отправка логина" 
+                        (method: "POST",
+                        url: "
+                        http://${RequestHost}://login_password_page.php",
+                        
+                        body: [
+                        
+                        "return"=
+                        "index.php"
+                        ,
+                        "username"=
+                        "${login_author}"
+                        
+                        ]
+                        ,
+                        upload-files: [
+                        
+                        ]
+                        )
+                        </li>
+                     <li><b>http request</b>
+                        "Отправка пароля" 
+                        (method: "POST",
+                        url: "
+                        http://${RequestHost}://login.php",
+                        
+                        body: [
+                        
+                        "return"=
+                        "index.php"
+                        ,
+                        "username"=
+                        "${login_author}"
+                        ,
+                        "password"=
+                        "${password_author}"
+                        
+                        ]
+                        ,
+                        upload-files: [
+                        
+                        ]
+                        )
+                        <br>
+                        &nbsp;&nbsp;&nbsp;Comments: <i style="color:green">Detected the start of a redirect chain</i></li>
+                     <li><b>write samples</b>
+                        "Graph Results" </li>
+                     <li><b>write samples</b>
+                        "Aggregate Graph" </li>
+                  </ul>
+               </li>
+               <li><b>kg.apc.jmeter.threads.UltimateThreadGroup</b>
+                  "Просмотр задач - Ultimate Thread Group" </li>
+               <li>
+                  <ul>
+                     <li><b>handle cookies</b>
+                        "HTTP Cookie Manager" 
+                        (clearOnEachIteration: false,
+                        policy: "",
+                        cookies: [
+                        ])
+                        </li>
+                     <li><b>OnceOnlyController</b>
+                        "Авторизация" </li>
+                     <li>
+                        <ul>
+                           <li><b>http request</b>
+                              "авторизация develop" 
+                              (method: "POST",
+                              url: "
+                              http://${RequestHost}://login.php",
+                              
+                              body: [
+                              
+                              "return"=
+                              "index.php"
+                              ,
+                              "username"=
+                              "${login_develop}"
+                              ,
+                              "password"=
+                              "${password_develop}"
+                              
+                              ]
+                              ,
+                              upload-files: [
+                              
+                              ]
+                              )
+                              <br>
+                              &nbsp;&nbsp;&nbsp;Comments: <i style="color:green">Detected the start of a redirect chain</i></li>
+                        </ul>
+                     </li>
+                     <li><b>flow control</b>
+                        "Test Action: Шаг нагрузки, 1 минута" <b>
+                           pause for 0ms
+                           
+                           current thread
+                           </b></li>
+                     <li>
+                        <ul>
+                           <li><b>ConstantThroughputTimer</b>
+                              "Constant Throughput Timer: Интенсивность работы пользователя" <del>(disabled)</del>&nbsp;
+                              </li>
+                           <li><b>PreciseThroughputTimer</b>
+                              "Precise Throughput Timer: Интенсивность работы пользователя" </li>
+                        </ul>
+                     </li>
+                     <li><b>http request</b>
+                        "Просмотр всех задач" 
+                        (method: "GET",
+                        url: "
+                        http://${RequestHost}://view_all_bug_page.php",
+                        
+                        body: [
+                        
+                        ]
+                        ,
+                        upload-files: [
+                        
+                        ]
+                        )
+                        </li>
+                     <li>
+                        <ul>
+                           <li><b>extract-boundary </b>
+                              "numberIssue_Boundary" <b>
+                                 using response body
+                                 </b>
+                              (exportedVar: "numberIssue",
+                              lboundary: "&gt;&lt;a href="/view.php?id=",
+                              rboundary: ""&gt;",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                        </ul>
+                     </li>
+                     <li><b>http request</b>
+                        "Просмотр рандомной задачи" 
+                        (method: "GET",
+                        url: "
+                        http://${RequestHost}://view.php",
+                        
+                        body: [
+                        
+                        "id"=
+                        "${numberIssue}"
+                        
+                        ]
+                        ,
+                        upload-files: [
+                        
+                        ]
+                        )
+                        </li>
+                  </ul>
+               </li>
+               <li><b>kg.apc.jmeter.threads.UltimateThreadGroup</b>
+                  "Создание сообщений - Ultimate Thread Group" </li>
+               <li>
+                  <ul>
+                     <li><b>handle cookies</b>
+                        "HTTP Cookie Manager" 
+                        (clearOnEachIteration: false,
+                        policy: "",
+                        cookies: [
+                        ])
+                        </li>
+                     <li><b>OnceOnlyController</b>
+                        "Авторизация" </li>
+                     <li>
+                        <ul>
+                           <li><b>http request</b>
+                              "авторизация develop" 
+                              (method: "POST",
+                              url: "
+                              http://${RequestHost}://login.php",
+                              
+                              body: [
+                              
+                              "return"=
+                              "index.php"
+                              ,
+                              "username"=
+                              "${login_develop}"
+                              ,
+                              "password"=
+                              "${password_develop}"
+                              
+                              ]
+                              ,
+                              upload-files: [
+                              
+                              ]
+                              )
+                              <br>
+                              &nbsp;&nbsp;&nbsp;Comments: <i style="color:green">Detected the start of a redirect chain</i></li>
+                        </ul>
+                     </li>
+                     <li><b>flow control</b>
+                        "Test Action: Шаг нагрузки, 5 минут" <b>
+                           pause for 0ms
+                           
+                           current thread
+                           </b></li>
+                     <li>
+                        <ul>
+                           <li><b>PreciseThroughputTimer</b>
+                              "Precise Throughput Timer: Интенсивность работы пользователя" </li>
+                        </ul>
+                     </li>
+                     <li><b>http request</b>
+                        "Просмотр всех задач" 
+                        (method: "GET",
+                        url: "
+                        http://${RequestHost}://view_all_bug_page.php",
+                        
+                        body: [
+                        
+                        ]
+                        ,
+                        upload-files: [
+                        
+                        ]
+                        )
+                        </li>
+                     <li>
+                        <ul>
+                           <li><b>extract-boundary </b>
+                              "numberIssue_Boundary" <b>
+                                 using response body
+                                 </b>
+                              (exportedVar: "numberIssue",
+                              lboundary: "&gt;&lt;a href="/view.php?id=",
+                              rboundary: ""&gt;",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                        </ul>
+                     </li>
+                     <li><b>http request</b>
+                        "Просмотр рандомной задачи" 
+                        (method: "GET",
+                        url: "
+                        http://${RequestHost}://view.php",
+                        
+                        body: [
+                        
+                        "id"=
+                        "${numberIssue}"
+                        
+                        ]
+                        ,
+                        upload-files: [
+                        
+                        ]
+                        )
+                        </li>
+                     <li>
+                        <ul>
+                           <li><b>extract-css-selector </b>
+                              "bugnoteAddToken_CSS" <b>using response body</b>
+                              (exportedVar: "bugnoteAddToken",
+                              selector: "input[name='bugnote_add_token']",
+                              attribute: "value",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                        </ul>
+                     </li>
+                     <li><b>http request</b>
+                        "Добавление сообщения в задаче" 
+                        (method: "POST",
+                        url: "
+                        http://${RequestHost}://bugnote_add.php",
+                        
+                        body: [
+                        
+                        "bugnote_add_token"=
+                        "${bugnoteAddToken}"
+                        ,
+                        "bug_id"=
+                        "${numberIssue}"
+                        ,
+                        "bugnote_text"=
+                        "${__RandomString(20, abcdefghijklmnopqrstuvwxyz, noteText)}"
+                        ,
+                        "max_file_size"=
+                        "2097152"
+                        
+                        ]
+                        ,
+                        upload-files: [
+                        
+                        ]
+                        )
+                        <br>
+                        &nbsp;&nbsp;&nbsp;Comments: <i style="color:green">Detected the start of a redirect chain</i></li>
+                  </ul>
+               </li>
+               <li><b>kg.apc.jmeter.threads.UltimateThreadGroup</b>
+                  "Смена статуса задач - Ultimate Thread Group" </li>
+               <li>
+                  <ul>
+                     <li><b>handle cookies</b>
+                        "HTTP Cookie Manager" 
+                        (clearOnEachIteration: false,
+                        policy: "",
+                        cookies: [
+                        ])
+                        </li>
+                     <li><b>OnceOnlyController</b>
+                        "Авторизация" </li>
+                     <li>
+                        <ul>
+                           <li><b>http request</b>
+                              "авторизация develop" 
+                              (method: "POST",
+                              url: "
+                              http://${RequestHost}://login.php",
+                              
+                              body: [
+                              
+                              "return"=
+                              "index.php"
+                              ,
+                              "username"=
+                              "${login_develop}"
+                              ,
+                              "password"=
+                              "${password_develop}"
+                              
+                              ]
+                              ,
+                              upload-files: [
+                              
+                              ]
+                              )
+                              <br>
+                              &nbsp;&nbsp;&nbsp;Comments: <i style="color:green">Detected the start of a redirect chain</i></li>
+                        </ul>
+                     </li>
+                     <li><b>flow control</b>
+                        "Test Action: Шаг нагрузки, 30 минут" <b>
+                           pause for 0ms
+                           
+                           current thread
+                           </b></li>
+                     <li>
+                        <ul>
+                           <li><b>PreciseThroughputTimer</b>
+                              "Precise Throughput Timer: Интенсивность работы пользователя" </li>
+                        </ul>
+                     </li>
+                     <li><b>http request</b>
+                        "Просмотр всех задач" 
+                        (method: "GET",
+                        url: "
+                        http://${RequestHost}://view_all_bug_page.php",
+                        
+                        body: [
+                        
+                        ]
+                        ,
+                        upload-files: [
+                        
+                        ]
+                        )
+                        </li>
+                     <li>
+                        <ul>
+                           <li><b>extract-boundary </b>
+                              "numberIssue_Boundary" <b>
+                                 using response body
+                                 </b>
+                              (exportedVar: "numberIssue",
+                              lboundary: "&gt;&lt;a href="/view.php?id=",
+                              rboundary: ""&gt;",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                        </ul>
+                     </li>
+                     <li><b>http request</b>
+                        "Просмотр рандомной задачи" 
+                        (method: "GET",
+                        url: "
+                        http://${RequestHost}://view.php",
+                        
+                        body: [
+                        
+                        "id"=
+                        "${numberIssue}"
+                        
+                        ]
+                        ,
+                        upload-files: [
+                        
+                        ]
+                        )
+                        </li>
+                     <li>
+                        <ul>
+                           <li><b>extract-css-selector </b>
+                              "newStatus_CSS" <b>using response body</b>
+                              (exportedVar: "newStatus",
+                              selector: "tfoot [name='new_status']&gt;option",
+                              attribute: "value",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                           <li><b>extract-css-selector </b>
+                              "handlerId_CSS" <b>using response body</b>
+                              (exportedVar: "handlerId",
+                              selector: "tfoot [name='handler_id']&gt;option",
+                              attribute: "value",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                           <li><b>extract-css-selector </b>
+                              "bugUpdateToken_CSS" <b>using response body</b>
+                              (exportedVar: "bugUpdateToken",
+                              selector: "input[name='bug_update_token']",
+                              attribute: "value",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                           <li><b>extract-css-selector </b>
+                              "lastUpdated_CSS" <b>using response body</b>
+                              (exportedVar: "lastUpdated",
+                              selector: "input[name='last_updated']",
+                              attribute: "value",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                        </ul>
+                     </li>
+                     <li><b>http request</b>
+                        "Смена статуса задачи" 
+                        (method: "POST",
+                        url: "
+                        http://${RequestHost}://bug_change_status_page.php",
+                        
+                        body: [
+                        
+                        "new_status"=
+                        "${newStatus}"
+                        ,
+                        "id"=
+                        "${numberIssue}"
+                        ,
+                        "change_type"=
+                        "change_status"
+                        
+                        ]
+                        ,
+                        upload-files: [
+                        
+                        ]
+                        )
+                        </li>
+                     <li><b>http request</b>
+                        "Подтверждение смены статуса задачи" 
+                        (method: "POST",
+                        url: "
+                        http://${RequestHost}://bug_update.php",
+                        
+                        body: [
+                        
+                        "bug_update_token"=
+                        "${bugUpdateToken}"
+                        ,
+                        "bug_id"=
+                        "${numberIssue}"
+                        ,
+                        "status"=
+                        "${newStatus}"
+                        ,
+                        "last_updated"=
+                        "${lastUpdated}"
+                        ,
+                        "handler_id"=
+                        "${handlerId}"
+                        ,
+                        "bugnote_text"=
+                        "${__RandomString(20, abcdefghijklmnopqrstuvwxyz, changeStatusText)}"
+                        ,
+                        "action_type"=
+                        "change_status"
+                        
+                        ]
+                        ,
+                        upload-files: [
+                        
+                        ]
+                        )
+                        <br>
+                        &nbsp;&nbsp;&nbsp;Comments: <i style="color:green">Detected the start of a redirect chain</i></li>
+                  </ul>
+               </li>
+               <li><b>kg.apc.jmeter.threads.UltimateThreadGroup</b>
+                  "Редактирование задач - Ultimate Thread Group" </li>
+               <li>
+                  <ul>
+                     <li><b>handle cookies</b>
+                        "HTTP Cookie Manager" 
+                        (clearOnEachIteration: false,
+                        policy: "",
+                        cookies: [
+                        ])
+                        </li>
+                     <li><b>OnceOnlyController</b>
+                        "Авторизация" </li>
+                     <li>
+                        <ul>
+                           <li><b>http request</b>
+                              "авторизация editor" 
+                              (method: "POST",
+                              url: "
+                              http://${RequestHost}://login.php",
+                              
+                              body: [
+                              
+                              "return"=
+                              "index.php"
+                              ,
+                              "username"=
+                              "${login_editor}"
+                              ,
+                              "password"=
+                              "${password_editor}"
+                              
+                              ]
+                              ,
+                              upload-files: [
+                              
+                              ]
+                              )
+                              <br>
+                              &nbsp;&nbsp;&nbsp;Comments: <i style="color:green">Detected the start of a redirect chain</i></li>
+                        </ul>
+                     </li>
+                     <li><b>flow control</b>
+                        "Test Action: Шаг нагрузки, 45 минут" <b>
+                           pause for 0ms
+                           
+                           current thread
+                           </b></li>
+                     <li>
+                        <ul>
+                           <li><b>PreciseThroughputTimer</b>
+                              "Precise Throughput Timer: Интенсивность работы пользователя" </li>
+                        </ul>
+                     </li>
+                     <li><b>http request</b>
+                        "Просмотр всех задач" 
+                        (method: "GET",
+                        url: "
+                        http://${RequestHost}://view_all_bug_page.php",
+                        
+                        body: [
+                        
+                        ]
+                        ,
+                        upload-files: [
+                        
+                        ]
+                        )
+                        </li>
+                     <li>
+                        <ul>
+                           <li><b>extract-boundary </b>
+                              "numberIssue_Boundary" <b>
+                                 using response body
+                                 </b>
+                              (exportedVar: "numberIssue",
+                              lboundary: "&gt;&lt;a href="/view.php?id=",
+                              rboundary: ""&gt;",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                        </ul>
+                     </li>
+                     <li><b>http request</b>
+                        "Просмотр рандомной задачи" 
+                        (method: "GET",
+                        url: "
+                        http://${RequestHost}://view.php",
+                        
+                        body: [
+                        
+                        "id"=
+                        "${numberIssue}"
+                        
+                        ]
+                        ,
+                        upload-files: [
+                        
+                        ]
+                        )
+                        </li>
+                     <li>
+                        <ul>
+                           <li><b>extract-css-selector </b>
+                              "bugUpdatePageToken_CSS" <b>using response body</b>
+                              (exportedVar: "bugUpdatePageToken",
+                              selector: "input[name='bug_update_page_token']",
+                              attribute: "value",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                        </ul>
+                     </li>
+                     <li><b>http request</b>
+                        "Редактирование задачи" 
+                        (method: "POST",
+                        url: "
+                        http://${RequestHost}://bug_update_page.php",
+                        
+                        body: [
+                        
+                        "bug_update_page_token"=
+                        "${bugUpdatePageToken}"
+                        ,
+                        "bug_id"=
+                        "${numberIssue}"
+                        
+                        ]
+                        ,
+                        upload-files: [
+                        
+                        ]
+                        )
+                        </li>
+                     <li>
+                        <ul>
+                           <li><b>extract-css-selector </b>
+                              "viewState_CSS" <b>using response body</b>
+                              (exportedVar: "viewState",
+                              selector: "[name='view_state']&gt;option",
+                              attribute: "value",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                           <li><b>extract-css-selector </b>
+                              "lastUpdated_CSS" <b>using response body</b>
+                              (exportedVar: "lastUpdated",
+                              selector: "input[name='last_updated']",
+                              attribute: "value",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                           <li><b>extract-css-selector </b>
+                              "bugUpdateToken_CSS" <b>using response body</b>
+                              (exportedVar: "bugUpdateToken",
+                              selector: "input[name='bug_update_token']",
+                              attribute: "value",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                           <li><b>extract-css-selector </b>
+                              "handlerId_CSS" <b>using response body</b>
+                              (exportedVar: "handlerId",
+                              selector: "[name='handler_id']&gt;option",
+                              attribute: "value",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                           <li><b>extract-css-selector </b>
+                              "priority_CSS" <b>using response body</b>
+                              (exportedVar: "priority",
+                              selector: "[name='priority']&gt;option",
+                              attribute: "value",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                           <li><b>extract-css-selector </b>
+                              "severity_CSS" <b>using response body</b>
+                              (exportedVar: "severity",
+                              selector: "[name='severity']&gt;option",
+                              attribute: "value",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                           <li><b>extract-css-selector </b>
+                              "reproducibility_CSS" <b>using response body</b>
+                              (exportedVar: "reproducibility",
+                              selector: "[name='reproducibility']&gt;option",
+                              attribute: "value",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                           <li><b>extract-css-selector </b>
+                              "statusSelected_CSS" <b>using response body</b>
+                              (exportedVar: "status",
+                              selector: "[name='status']&gt;option[selected]",
+                              attribute: "value",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                           <li><b>extract-css-selector </b>
+                              "resolutionSelected_CSS" <b>using response body</b>
+                              (exportedVar: "resolution",
+                              selector: "[name='resolution']&gt;option[selected]",
+                              attribute: "value",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                           <li><b>extract-css-selector </b>
+                              "categoryIdSelected_CSS" <b>using response body</b>
+                              (exportedVar: "categoryId",
+                              selector: "[name='category_id']&gt;option[selected]",
+                              attribute: "value",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                        </ul>
+                     </li>
+                     <li><b>http request</b>
+                        "Подтверждение редактирования задачи" 
+                        (method: "POST",
+                        url: "
+                        http://${RequestHost}://bug_update.php",
+                        
+                        body: [
+                        
+                        "bug_update_token"=
+                        "${bugUpdateToken}"
+                        ,
+                        "bug_id"=
+                        "${numberIssue}"
+                        ,
+                        "last_updated"=
+                        "${lastUpdated}"
+                        ,
+                        "category_id"=
+                        "${categoryId}"
+                        ,
+                        "view_state"=
+                        "${viewState}"
+                        ,
+                        "handler_id"=
+                        "${handlerId}"
+                        ,
+                        "priority"=
+                        "${priority}"
+                        ,
+                        "severity"=
+                        "${severity}"
+                        ,
+                        "reproducibility"=
+                        "${reproducibility}"
+                        ,
+                        "status"=
+                        "${status}"
+                        ,
+                        "resolution"=
+                        "${resolution}"
+                        ,
+                        "platform"=
+                        ""
+                        ,
+                        "os"=
+                        ""
+                        ,
+                        "os_build"=
+                        ""
+                        ,
+                        "summary"=
+                        "${__RandomString(20, abcdefghijklmnopqrstuvwxyz, summaryText)}"
+                        ,
+                        "description"=
+                        "${__RandomString(20, abcdefghijklmnopqrstuvwxyz, descriptionText)}"
+                        ,
+                        "steps_to_reproduce"=
+                        "1. ${__RandomString(20, abcdefghijklmnopqrstuvwxyz, stepsText)}%0D%0A2. ${__RandomString(20,
+                        abcdefghijklmnopqrstuvwxyz, stepsText)}%0D%0A3. ${__RandomString(20, abcdefghijklmnopqrstuvwxyz,
+                        stepsText)}"
+                        ,
+                        "additional_information"=
+                        "${__RandomString(20, abcdefghijklmnopqrstuvwxyz, additionalText)}"
+                        ,
+                        "bugnote_text"=
+                        "${__RandomString(20, abcdefghijklmnopqrstuvwxyz, editionText)}"
+                        
+                        ]
+                        ,
+                        upload-files: [
+                        
+                        ]
+                        )
+                        <br>
+                        &nbsp;&nbsp;&nbsp;Comments: <i style="color:green">Detected the start of a redirect chain</i></li>
+                     <li>
+                        <ul>
+                           <li><b>assert as</b>
+                              "Response Assertion" <b> that (response_data)</b><b>
+                                 does not contain as substring
+                                 </b>
+                              [
+                              
+                              "APPLICATION ERROR"
+                              
+                              ])
+                              </li>
+                        </ul>
+                     </li>
+                     <li><b>write samples</b>
+                        "View Results Tree" </li>
+                  </ul>
+               </li>
+               <li><b>kg.apc.jmeter.threads.UltimateThreadGroup</b>
+                  "Создание задач - Ultimate Thread Group" </li>
+               <li>
+                  <ul>
+                     <li><b>handle cookies</b>
+                        "HTTP Cookie Manager" 
+                        (clearOnEachIteration: false,
+                        policy: "",
+                        cookies: [
+                        ])
+                        </li>
+                     <li><b>OnceOnlyController</b>
+                        "Авторизация" </li>
+                     <li>
+                        <ul>
+                           <li><b>http request</b>
+                              "авторизация manager" 
+                              (method: "POST",
+                              url: "
+                              http://${RequestHost}://login.php",
+                              
+                              body: [
+                              
+                              "return"=
+                              "index.php"
+                              ,
+                              "username"=
+                              "${login_manager}"
+                              ,
+                              "password"=
+                              "${password_manager}"
+                              
+                              ]
+                              ,
+                              upload-files: [
+                              
+                              ]
+                              )
+                              <br>
+                              &nbsp;&nbsp;&nbsp;Comments: <i style="color:green">Detected the start of a redirect chain</i></li>
+                        </ul>
+                     </li>
+                     <li><b>flow control</b>
+                        "Test Action: Шаг нагрузки, 60 минут" <b>
+                           pause for 0ms
+                           
+                           current thread
+                           </b></li>
+                     <li>
+                        <ul>
+                           <li><b>PreciseThroughputTimer</b>
+                              "Precise Throughput Timer: Интенсивность работы пользователя" </li>
+                        </ul>
+                     </li>
+                     <li><b>http request</b>
+                        "Создание задачи" 
+                        (method: "GET",
+                        url: "
+                        http://${RequestHost}://bug_report_page.php",
+                        
+                        body: [
+                        
+                        ]
+                        ,
+                        upload-files: [
+                        
+                        ]
+                        )
+                        </li>
+                     <li>
+                        <ul>
+                           <li><b>extract-css-selector </b>
+                              "categoryIdSelected_CSS" <b>using response body</b>
+                              (exportedVar: "categoryId",
+                              selector: "[name='category_id']&gt;option[selected]",
+                              attribute: "value",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                           <li><b>extract-css-selector </b>
+                              "viewStateSelected_CSS" <b>using response body</b>
+                              (exportedVar: "viewState",
+                              selector: "[name='view_state'][checked]",
+                              attribute: "value",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                           <li><b>extract-css-selector </b>
+                              "mId_CSS" <b>using response body</b>
+                              (exportedVar: "mId",
+                              selector: "input[name='m_id']",
+                              attribute: "value",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                           <li><b>extract-css-selector </b>
+                              "projectId_CSS" <b>using response body</b>
+                              (exportedVar: "projectId",
+                              selector: "input[name='project_id']",
+                              attribute: "value",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                           <li><b>extract-css-selector </b>
+                              "reproducibility_CSS" <b>using response body</b>
+                              (exportedVar: "reproducibility",
+                              selector: "[name='reproducibility']&gt;option",
+                              attribute: "value",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                           <li><b>extract-css-selector </b>
+                              "severity_CSS" <b>using response body</b>
+                              (exportedVar: "severity",
+                              selector: "[name='severity']&gt;option",
+                              attribute: "value",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                           <li><b>extract-css-selector </b>
+                              "priority_CSS" <b>using response body</b>
+                              (exportedVar: "priority",
+                              selector: "[name='priority']&gt;option",
+                              attribute: "value",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                           <li><b>extract-css-selector </b>
+                              "bugReportToken_CSS" <b>using response body</b>
+                              (exportedVar: "bugReportToken",
+                              selector: "input[name='bug_report_token']",
+                              attribute: "value",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                        </ul>
+                     </li>
+                     <li><b>http request</b>
+                        "Подтверждение создания задачи" 
+                        (method: "POST",
+                        url: "
+                        http://${RequestHost}://bug_report.php?posted=1",
+                        
+                        body: [
+                        
+                        "bug_report_token"=
+                        "${bugReportToken}"
+                        ,
+                        "m_id"=
+                        "${mId}"
+                        ,
+                        "project_id"=
+                        "${projectId}"
+                        ,
+                        "category_id"=
+                        "${categoryId}"
+                        ,
+                        "reproducibility"=
+                        "${reproducibility}"
+                        ,
+                        "severity"=
+                        "${severity}"
+                        ,
+                        "priority"=
+                        "${priority}"
+                        ,
+                        "platform"=
+                        ""
+                        ,
+                        "os"=
+                        ""
+                        ,
+                        "os_build"=
+                        ""
+                        ,
+                        "summary"=
+                        "${__RandomString(20, abcdefghijklmnopqrstuvwxyz, summaryText)}"
+                        ,
+                        "description"=
+                        "${__RandomString(20, abcdefghijklmnopqrstuvwxyz, descriptionText)}"
+                        ,
+                        "steps_to_reproduce"=
+                        "1. ${__RandomString(20, abcdefghijklmnopqrstuvwxyz, stepsText)}%0D%0A2. ${__RandomString(20,
+                        abcdefghijklmnopqrstuvwxyz, stepsText)}%0D%0A3. ${__RandomString(20, abcdefghijklmnopqrstuvwxyz,
+                        stepsText)}"
+                        ,
+                        "additional_info"=
+                        "${__RandomString(20, abcdefghijklmnopqrstuvwxyz, additionalText)}"
+                        ,
+                        "tag_string"=
+                        "LOAD"
+                        ,
+                        "tag_select"=
+                        "0"
+                        ,
+                        "max_file_size"=
+                        "2097152"
+                        ,
+                        "view_state"=
+                        "${viewState}"
+                        
+                        ]
+                        ,
+                        upload-files: [
+                        
+                        ]
+                        )
+                        </li>
+                     <li>
+                        <ul>
+                           <li><b>assert as</b>
+                              "Response Assertion" <b> that (response_data)</b><b>
+                                 does not contain as substring
+                                 </b>
+                              [
+                              
+                              "APPLICATION ERROR"
+                              
+                              ])
+                              </li>
+                           <li><b>extract-css-selector </b>
+                              "createdIssueRefreshContent_CSS" <b>using response body</b>
+                              (exportedVar: "createdIssueRefresh",
+                              selector: "[http-equiv='Refresh']",
+                              attribute: "content",
+                              default: "NOT_FOUND",
+                              matchNr: "0")
+                              </li>
+                           <li><b>extract-regexp </b>
+                              "createdIssue_RegExp" <b>
+                                 using response body
+                                 </b>
+                              (exportedVar: "createdIssue"
+                              regex: "",
+                              template: "",
+                              default: "",
+                              matchNr: "")
+                              </li>
+                        </ul>
+                     </li>
+                     <li><b>think-time Constant</b>
+                        "Constant Timer" 
+                        (const:2000ms)
+                        </li>
+                     <li><b>http request</b>
+                        "Просмотр созданной задачи" 
+                        (method: "GET",
+                        url: "
+                        http://${RequestHost}://view.php",
+                        
+                        body: [
+                        
+                        "id"=
+                        "${createdIssue}"
+                        
+                        ]
+                        ,
+                        upload-files: [
+                        
+                        ]
+                        )
+                        </li>
+                     <li>
+                        <ul>
+                           <li><b>assert as</b>
+                              "Response Assertion" <b> that (response_data)</b><b>
+                                 does not contain as substring
+                                 </b>
+                              [
+                              
+                              "APPLICATION ERROR"
+                              
+                              ])
+                              </li>
+                        </ul>
+                     </li>
+                  </ul>
+               </li>
+               <li><b>BackendListener</b>
+                  "Backend Listener" </li>
+               <li><b>kg.apc.jmeter.reporters.AutoStop</b>
+                  "AutoStop Listener" </li>
+            </ul>
+         </li>
+      </ul>
+   </body>
+</html>

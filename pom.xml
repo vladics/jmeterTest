@@ -36,9 +36,9 @@
         <name.test>nameTest</name.test>
         <dir>${name.test}-${maven.build.timestamp}</dir>
 
-        <test.Threads>10</test.Threads>
-        <test.RampUp>1</test.RampUp>
-        <test.LoopCount>1</test.LoopCount>
+        <test.Threads>40</test.Threads>
+        <test.RampUp>60</test.RampUp>
+        <test.LoopCount>500</test.LoopCount>
         <test.RequestPath>/</test.RequestPath>
         <test.RequestHost>blazedemo.com</test.RequestHost>
         <test.RequestPort>80</test.RequestPort>
@@ -102,6 +102,8 @@
                         https://github.com/Blazemeter/jmeter-bzm-plugins/blob/master/parallel/Parallel.md
                         https://www.blazemeter.com/blog/how-to-use-the-parallel-controller-in-jmeter -->
                         <artifact>com.blazemeter:jmeter-parallel:0.9</artifact>
+
+                        <artifact>kg.apc:jmeter-plugins-autostop:0.1</artifact>
                     </jmeterExtensions>
 
                     <testPlanLibraries>
@@ -124,8 +126,8 @@ http://reins.altervista.org/java/A_Collection_of_JVM_Options_MP.html
 https://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html
 -->
                     <jMeterProcessJVMSettings>
-                        <xms>256</xms>
-                        <xmx>1024</xmx>
+                        <xms>4096</xms>
+                        <xmx>4096</xmx>
                         <arguments>
                             <argument>-XX:MaxMetaspaceSize=256m</argument>
 
@@ -192,9 +194,8 @@ https://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html
 
                     <resultsFileFormat>csv</resultsFileFormat>
                     <generateReports>true</generateReports>
-                    <reportDirectory>
-                        ${project.build.directory}/jmeter/reports/${performancetest.script}-${maven.build.timestamp}
-                    </reportDirectory>
+                    <resultsDirectory>${project.build.directory}/jmeter/results/</resultsDirectory>
+                    <reportDirectory>${project.build.directory}/jmeter/reports/</reportDirectory>
                 </configuration>
             </plugin>
 
