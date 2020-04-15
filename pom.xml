@@ -8,18 +8,6 @@
     <artifactId>jmeter-test</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <profiles>
-        <profile>
-            <id>HTTP.Request</id>
-            <properties>
-                <performancetest.script>HTTP.Request</performancetest.script>
-                <Threads>0</Threads>
-                <RampUp>0</RampUp>
-                <LoopCount>0</LoopCount>
-            </properties>
-        </profile>
-    </profiles>
-
     <!-- Properties -->
     <properties>
 
@@ -32,11 +20,10 @@
         <jmeter.version>5.1.1</jmeter.version>
 
         <!-- Test name -->
-        <performancetest.script>testMantis.jmx</performancetest.script>
+        <performancetest.script>testMantis</performancetest.script>
         <name.test>nameTest</name.test>
-        <dir>${name.test}-${maven.build.timestamp}</dir>
 
-        <test.Threads>40</test.Threads>
+        <test.Threads>100</test.Threads>
         <test.RampUp>60</test.RampUp>
         <test.LoopCount>500</test.LoopCount>
         <test.RequestPath>/</test.RequestPath>
@@ -61,13 +48,6 @@
                 <artifactId>jmeter-maven-plugin</artifactId>
                 <version>${jmeter.maven.plugin.version}</version>
                 <executions>
-                    <!-- Generate JMeter configuration -->
-                    <execution>
-                        <id>configuration</id>
-                        <goals>
-                            <goal>configure</goal>
-                        </goals>
-                    </execution>
                     <!-- Run JMeter tests -->
                     <execution>
                         <id>jmeter-tests</id>
@@ -75,21 +55,13 @@
                             <goal>jmeter</goal>
                         </goals>
                     </execution>
-                    <!-- Fail build on errors in test -->
-                    <execution>
-                        <id>jmeter-check-results</id>
-                        <goals>
-                            <goal>results</goal>
-                        </goals>
-                    </execution>
                 </executions>
 
                 <configuration>
                     <testFilesIncluded>
-                        <jMeterTestFile>${performancetest.script}</jMeterTestFile>
+                        <jMeterTestFile>${performancetest.script}.jmx</jMeterTestFile>
                     </testFilesIncluded>
                     <jmeterVersion>${jmeter.version}</jmeterVersion>
-                    <guiTestFile>${project.basedir}/src/test/jmeter/${performancetest.script}</guiTestFile>
 
                     <jmeterExtensions>
                         <!-- Custom Thread Groups
@@ -104,6 +76,10 @@
                         <artifact>com.blazemeter:jmeter-parallel:0.9</artifact>
 
                         <artifact>kg.apc:jmeter-plugins-autostop:0.1</artifact>
+                        <artifact>kg.apc:jmeter-plugins-graphs-basic:2.0</artifact>
+                        <artifact>kg.apc:jmeter-plugins-graphs-additional:2.0</artifact>
+                        <artifact>cloud.testload:jmeter.pack-listener:1.7</artifact>
+
                     </jmeterExtensions>
 
                     <testPlanLibraries>
@@ -126,8 +102,8 @@ http://reins.altervista.org/java/A_Collection_of_JVM_Options_MP.html
 https://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html
 -->
                     <jMeterProcessJVMSettings>
-                        <xms>4096</xms>
-                        <xmx>4096</xmx>
+                        <xms>256</xms>
+                        <xmx>8198</xmx>
                         <arguments>
                             <argument>-XX:MaxMetaspaceSize=256m</argument>
 
@@ -145,9 +121,7 @@ https://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html
                         </arguments>
                     </jMeterProcessJVMSettings>
 
-                    <testResultsTimestamp>true</testResultsTimestamp>
-                    <appendResultsTimestamp>true</appendResultsTimestamp>
-                    <resultsFileNameDateFormat>yyyy-MM-dd_HH-mm-ss</resultsFileNameDateFormat>
+                    <guiTestFile>${project.basedir}/src/test/jmeter/${performancetest.script}.jmx</guiTestFile>
 
                     <propertiesJMeter>
                         <jmeter.save.saveservice.thread_counts>true</jmeter.save.saveservice.thread_counts>
@@ -169,14 +143,12 @@ https://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html
 
                     <propertiesReportGenerator>
                         <jmeter.reportgenerator.overall_granularity>5000</jmeter.reportgenerator.overall_granularity>
-                        <jmeter.reportgenerator.graph.responseTimeDistribution.property.set_granularity>5000
-                        </jmeter.reportgenerator.graph.responseTimeDistribution.property.set_granularity>
+                        <jmeter.reportgenerator.graph.responseTimeDistribution.property.set_granularity>5000</jmeter.reportgenerator.graph.responseTimeDistribution.property.set_granularity>
                     </propertiesReportGenerator>
 
                     <propertiesUser>
                         <testDataFolder>${project.basedir}/src/test/jmeter/data</testDataFolder>
                         <test.script.folder>${project.basedir}/src/test/jmeter/script</test.script.folder>
-                        <reportFolder>${project.build.directory}/jmeter/results/${performancetest.script}</reportFolder>
 
                         <Threads>${test.Threads}</Threads>
                         <RampUp>${test.RampUp}</RampUp>
@@ -193,71 +165,17 @@ https://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html
                     </propertiesUser>
 
                     <resultsFileFormat>csv</resultsFileFormat>
+                    <testResultsTimestamp>true</testResultsTimestamp>
+                    <appendResultsTimestamp>true</appendResultsTimestamp>
+                    <resultsFileNameDateFormat>yyyy-MM-dd_HH-mm-ss</resultsFileNameDateFormat>
+                    <overrideRootLogLevel>DEBUG</overrideRootLogLevel>
                     <generateReports>true</generateReports>
+
                     <resultsDirectory>${project.build.directory}/jmeter/results/</resultsDirectory>
-                    <reportDirectory>${project.build.directory}/jmeter/reports/</reportDirectory>
+                    <reportDirectory>${project.build.directory}/jmeter/reports/${performancetest.script}-${maven.build.timestamp}</reportDirectory>
+                    <logsDirectory>${project.build.directory}/jmeter/logs/${performancetest.script}-${maven.build.timestamp}</logsDirectory>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <!-- https://www.mojohaus.org/exec-maven-plugin/usage.html -->
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>${exec.maven.plugin.version}</version>
-                <executions>
-
-                    <execution>
-                        <id>csv2influx</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <workingDirectory>${project.basedir}/src/test/tools/</workingDirectory>
-                            <!-- https://github.com/jpillora/csv-to-influxdb/releases -->
-                            <executable>${project.basedir}/src/test/tools/csv-to-influxdb_linux_amd64</executable>
-
-                            <!--<executable>csv-to-influxdb_windows_amd64</executable>-->
-                            <!--<executable>csv-to-influxdb_darwin_amd64</executable>-->
-                            <arguments>
-                                <argument>--server</argument>
-                                <argument>http://${influxdb.host}:${influxdb.port}</argument>
-
-                                <argument>--database</argument>
-                                <argument>${influxdb.database}</argument>
-
-                                <argument>--username</argument>
-                                <argument>${influxdb.username}</argument>
-
-                                <argument>--password</argument>
-                                <argument>${influxdb.password}</argument>
-
-                                <argument>--measurement</argument>
-                                <argument>csv2influxdb</argument>
-
-                                <argument>--batch-size</argument>
-                                <argument>5000</argument>
-
-                                <argument>--tag-columns</argument>
-                                <argument>label,responseCode,responseMessage,threadName,dataType,success,failureMessage,URL</argument>
-
-                                <argument>--timestamp-column</argument>
-                                <argument>timeStamp</argument>
-
-                                <argument>--timestamp-format</argument>
-                                <argument>unix</argument>
-
-                                <argument>--attempts</argument>
-                                <argument>10</argument>
-
-                                <argument>${project.build.directory}/jmeter/results/${performancetest.script}.csv</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-
-                </executions>
             </plugin>
         </plugins>
     </build>
-
 </project>
