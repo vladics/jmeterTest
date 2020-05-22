@@ -20,21 +20,21 @@
         <jmeter.version>5.1.1</jmeter.version>
 
         <!-- Test name -->
-        <performancetest.script>testMantis</performancetest.script>
+        <performancetest.script>test3Wordpress</performancetest.script>
         <name.test>nameTest</name.test>
 
         <test.Threads>100</test.Threads>
         <test.RampUp>60</test.RampUp>
         <test.LoopCount>500</test.LoopCount>
         <test.RequestPath>/</test.RequestPath>
-        <test.RequestHost>blazedemo.com</test.RequestHost>
+        <test.RequestHost>localhost</test.RequestHost>
         <test.RequestPort>80</test.RequestPort>
 
         <influxdb.host>localhost</influxdb.host>
         <influxdb.port>8086</influxdb.port>
         <influxdb.database>jmeter</influxdb.database>
-        <influxdb.username>none</influxdb.username>
-        <influxdb.password>none</influxdb.password>
+        <influxdb.username>grafana</influxdb.username>
+        <influxdb.password>grafana</influxdb.password>
 
         <maven.build.timestamp.format>yyyy-MM-dd_HH-mm-ss</maven.build.timestamp.format>
 
@@ -76,9 +76,15 @@
                         <artifact>com.blazemeter:jmeter-parallel:0.9</artifact>
 
                         <artifact>kg.apc:jmeter-plugins-autostop:0.1</artifact>
+                        <artifact>kg.apc:jmeter-plugins-perfmon:2.1</artifact>
+                        <artifact>kg.apc:jmeter-plugins-standard:1.4.0</artifact>
+                        <!-- Graphs Listener -->
                         <artifact>kg.apc:jmeter-plugins-graphs-basic:2.0</artifact>
                         <artifact>kg.apc:jmeter-plugins-graphs-additional:2.0</artifact>
-                        <artifact>cloud.testload:jmeter.pack-listener:1.7</artifact>
+                        <artifact>kg.apc:jmeter-plugins-graphs-dist:2.0</artifact>
+                        <artifact>kg.apc:jmeter-plugins-graphs-composite:2.0</artifact>
+                        <artifact>kg.apc:jmeter-plugins-graphs-vs:2.0</artifact>
+                        <artifact>cloud.testload:jmeter.pack-listener:1.9.3</artifact>
 
                     </jmeterExtensions>
 
@@ -86,9 +92,6 @@
                         <!-- JMeter Plugins Common Classes: Various utility classes to ease development of plugins
 			            http://repo.maven.apache.org/maven2/kg/apc/jmeter-plugins-cmn-jmeter/ -->
                         <artifact>kg.apc:jmeter-plugins-cmn-jmeter:0.6</artifact>
-
-                        <!-- InfluxDB java client + dependencies -->
-                        <artifact>org.influxdb:influxdb-java:2.15</artifact>
                     </testPlanLibraries>
 
                     <downloadExtensionDependencies>false</downloadExtensionDependencies>
@@ -124,19 +127,12 @@ https://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html
                     <guiTestFile>${project.basedir}/src/test/jmeter/${performancetest.script}.jmx</guiTestFile>
 
                     <propertiesJMeter>
+                        <httpclient.reset_state_on_thread_group_iteration>false</httpclient.reset_state_on_thread_group_iteration>
                         <jmeter.save.saveservice.thread_counts>true</jmeter.save.saveservice.thread_counts>
                         <jmeter.save.saveservice.subresults>true</jmeter.save.saveservice.subresults>
                         <sample_variables></sample_variables>
                         <!-- # Disable sent statistics to https://jmeter-plugins.org/stats/ -->
                         <jpgc.repo.sendstats>false</jpgc.repo.sendstats>
-
-                        <backend_metrics_window_mode>fixed</backend_metrics_window_mode>
-                        <backend_metrics_window>100</backend_metrics_window>
-                        <backend_metrics_large_window>5000</backend_metrics_large_window>
-                        <backend_influxdb.send_interval>5</backend_influxdb.send_interval>
-                        <backend_influxdb.connection_timeout>1000</backend_influxdb.connection_timeout>
-                        <backend_influxdb.socket_timeout>3000</backend_influxdb.socket_timeout>
-                        <backend_influxdb.connection_request_timeout>100</backend_influxdb.connection_request_timeout>
 
                         <sampleresult.default.encoding>UTF-8</sampleresult.default.encoding>
                     </propertiesJMeter>
@@ -168,7 +164,7 @@ https://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html
                     <testResultsTimestamp>true</testResultsTimestamp>
                     <appendResultsTimestamp>true</appendResultsTimestamp>
                     <resultsFileNameDateFormat>yyyy-MM-dd_HH-mm-ss</resultsFileNameDateFormat>
-                    <overrideRootLogLevel>DEBUG</overrideRootLogLevel>
+                    <overrideRootLogLevel>INFO</overrideRootLogLevel>
                     <generateReports>true</generateReports>
 
                     <resultsDirectory>${project.build.directory}/jmeter/results/</resultsDirectory>
